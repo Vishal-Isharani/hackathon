@@ -15,14 +15,16 @@ const MyDrawer = () => {
       <Drawer.Screen name="Desktop" component={DesktopScreen} />
 
       {/* TODO: validate duplicates */}
-      {categories.map((category, index) => (
-        <Drawer.Screen
-          name={category.name}
-          component={CategoryDetailsScreen}
-          key={index}
-          initialParams={{id: category.id}}
-        />
-      ))}
+      {categories
+        .filter(category => !!category.name)
+        .map((category, index) => (
+          <Drawer.Screen
+            name={category.name}
+            component={CategoryDetailsScreen}
+            key={index}
+            initialParams={{id: category.id}}
+          />
+        ))}
 
       <Drawer.Screen name="Manage Category" component={CategoryScreen} />
     </Drawer.Navigator>
