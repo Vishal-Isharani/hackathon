@@ -1,22 +1,18 @@
 import * as React from 'react';
-import {Button, Text, View} from 'react-native-ui-lib';
-import {useStoreActions} from '../../core/store/category/hooks';
+import {Text, View} from 'react-native-ui-lib';
+import {useStoreState} from '../../core/store';
 
-type Props = {};
-const Desktop = (props: Props) => {
-  const add = useStoreActions(state => state.category.addTodo);
+const DesktopScreen = () => {
+  const categories = useStoreState(state => state.category.categories);
   return (
-    <View>
+    <View padding-20>
+      {categories.map(category => (
+        <View key={category.id}>
+          <Text>{category.name}</Text>
+        </View>
+      ))}
       <Text>Hello from the desktop</Text>
-
-      <Button
-        text70
-        white
-        background-orange30
-        label="Login"
-        onPress={() => add({done: false, text: 'Vishal'})}
-      />
     </View>
   );
 };
-export default Desktop;
+export default DesktopScreen;

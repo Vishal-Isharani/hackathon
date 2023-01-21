@@ -4,7 +4,6 @@ import {SafeAreaView, useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import store from './src/core/store';
 import {StoreProvider} from 'easy-peasy';
-import {Test} from './src/test';
 import AppNavigator from './src/core/navigators';
 
 const App = () => {

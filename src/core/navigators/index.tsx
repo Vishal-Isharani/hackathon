@@ -1,25 +1,30 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import Category from '../../screens/Category';
-import Desktop from '../../screens/Desktop';
+import CategoryScreen from '../../screens/Category';
+import DesktopScreen from '../../screens/Desktop';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {useStoreState} from '../store/category/hooks';
-import {Todo} from '../store/category/model';
+import {useStoreState} from '../store';
+import CategoryDetailsScreen from '../../screens/CategoryDetails';
 
 const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
-  const todos = useStoreState(state => state.category.todos);
+  const categories = useStoreState(state => state.category.categories);
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name="Desktop" component={Desktop} />
+      <Drawer.Screen name="Desktop" component={DesktopScreen} />
 
       {/* TODO: validate duplicates */}
-      {todos.map((todo: Todo, index) => (
-        <Drawer.Screen name={todo.text} component={Category} key={index} />
+      {categories.map((category, index) => (
+        <Drawer.Screen
+          name={category.name}
+          component={CategoryDetailsScreen}
+          key={index}
+          initialParams={{id: category.id}}
+        />
       ))}
 
-      <Drawer.Screen name="Manage Category" component={Category} />
+      <Drawer.Screen name="Manage Category" component={CategoryScreen} />
     </Drawer.Navigator>
   );
 };

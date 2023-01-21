@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createStore, persist} from 'easy-peasy';
-import category from './category';
+import {createStore, createTypedHooks, persist} from 'easy-peasy';
+import storeDefinition, {StoreModel} from './model';
 
 const storage = {
   async getItem(key: string) {
@@ -15,21 +15,17 @@ const storage = {
   },
 };
 
-export interface StoreModel {
-  category: typeof category;
-}
-
 const store = createStore<StoreModel>(
-  persist(
-    {
-      category,
-    },
-    {
-      storage,
-      allow: ['category'],
-    },
-  ),
+  persist(storeDefinition, {
+    storage,
+    allow: ['category'],
+  }),
 );
 
-store.persist.clear();
+const typedHooks = createTypedHooks<StoreModel>();
+
+export const useStoreActions = typedHooks.useStoreActions;
+export const useStoreDispatch = typedHooks.useStoreDispatch;
+export const useStoreState = typedHooks.useStoreState;
+
 export default store;

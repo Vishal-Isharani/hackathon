@@ -89,9 +89,4 @@ public class MainApplication extends Application implements ReactApplication {
       }
     }
   }
-
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(null);
-  }
 }

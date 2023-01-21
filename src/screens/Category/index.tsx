@@ -1,16 +1,13 @@
 import * as React from 'react';
-import {
-  Button,
-  Colors,
-  Icon,
-  Picker,
-  TextField,
-  View,
-} from 'react-native-ui-lib';
+import {Button, Colors, Picker, TextField, View} from 'react-native-ui-lib';
 import {ScrollView} from 'react-native';
 import {useState} from 'react';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import uuid from 'react-native-uuid';
+import Icon from 'react-native-vector-icons/AntDesign';
+import {useStoreActions} from '../../core/store';
+import {Category} from '../../core/store/categoryListModel';
+import {ControlType} from '../../shared/models';
 
 const options = [
   {label: 'Date', value: 'date'},
@@ -18,8 +15,7 @@ const options = [
   {label: 'Checkbox', value: 'checkbox'},
   {label: 'Number', value: 'number'},
 ];
-const dropdown = require('../../assets/icons/chevronDown.png');
-const dropdownIcon = <Icon source={dropdown} tintColor={Colors.$iconDefault} />;
+const dropdownIcon = <Icon name="down" color={Colors.$iconDefault} />;
 
 const initialFormStat = () => ({
   name: '',
@@ -33,9 +29,8 @@ const initialFormStat = () => ({
   ],
 });
 
-type Props = {};
-const Category = (props: Props) => {
-  const {control} = useForm({
+const CategoryScreen = () => {
+  const {control, watch, getValues} = useForm({
     defaultValues: initialFormStat(),
   });
   const {fields, append, remove} = useFieldArray({
@@ -43,14 +38,27 @@ const Category = (props: Props) => {
     name: 'fields',
     keyName: 'id',
   });
+
   const [showNewCategoryForm, setShowNewCategoryForm] = useState(false);
   const [showTitleChangePicker, setShowTitleChangePicker] = useState(false);
+  const updateCategory = useStoreActions(
+    actions => actions.category.updateCategory,
+  );
+  const removeCategory = useStoreActions(
+    actions => actions.category.removeCategory,
+  );
+
+  // Callback version of watch.  It's your responsibility to unsubscribe when done.
+  React.useEffect(() => {
+    const subscription = watch(value => updateCategory(value as Category));
+    return () => subscription.unsubscribe();
+  }, [updateCategory, watch]);
 
   const addNewField = () => {
     append({
       id: '',
       name: '',
-      type: 'text',
+      type: ControlType.Text,
     });
   };
 
@@ -66,13 +74,13 @@ const Category = (props: Props) => {
     <ScrollView contentContainerStyle={{flex: 1}}>
       <View flex>
         {showNewCategoryForm && (
-          <View padding-20 flex>
+          <View padding-20>
             <Controller
               control={control}
-              name={`name`}
+              name={'name'}
               render={({field}) => (
                 <TextField
-                  placeholder={'Placeholder'}
+                  placeholder={'Name'}
                   floatingPlaceholder
                   migrate
                   value={field.value}
@@ -80,16 +88,8 @@ const Category = (props: Props) => {
                     field.onChange(text);
                   }}
                   enableErrors
-                  validate={[
-                    'required',
-                    'email',
-                    (value: string) => value.length > 6,
-                  ]}
-                  validationMessage={[
-                    'Field is required',
-                    'Email is invalid',
-                    'Password is too short',
-                  ]}
+                  validate={['required', (value: string) => value.length > 6]}
+                  validationMessage={['Field is required']}
                   maxLength={30}
                 />
               )}
@@ -97,28 +97,23 @@ const Category = (props: Props) => {
 
             {/* TODO: extract it to a component */}
             {fields.map((categoryField, index) => (
-              <View flex row>
+              <View row key={categoryField.id}>
                 <Controller
                   control={control}
                   name={`fields.${index}.name`}
                   render={({field}) => (
                     <TextField
                       value={field.value}
-                      placeholder={'Placeholder'}
+                      placeholder={'Field Name'}
                       floatingPlaceholder
                       migrate
                       onChangeText={() => {}}
                       enableErrors
                       validate={[
                         'required',
-                        'email',
                         (value: string) => value.length > 6,
                       ]}
-                      validationMessage={[
-                        'Field is required',
-                        'Email is invalid',
-                        'Password is too short',
-                      ]}
+                      validationMessage={['Field is required']}
                       maxLength={30}
                     />
                   )}
@@ -126,7 +121,7 @@ const Category = (props: Props) => {
 
                 <Controller
                   control={control}
-                  name={`fields.${index}.name`}
+                  name={`fields.${index}.type`}
                   render={({field}) => {
                     return (
                       /* @ts-ignore */
@@ -139,21 +134,15 @@ const Category = (props: Props) => {
                         selectionLimit={3}
                         trailingAccessory={dropdownIcon}
                         migrateTextField>
-                        {options.map(option => (
-                          <Picker.Item
-                            key={option.value}
-                            value={option.value}
-                            label={option.label}
-                          />
+                        {Object.keys(ControlType).map(key => (
+                          <Picker.Item key={key} value={key} label={key} />
                         ))}
                       </Picker>
                     );
                   }}
                 />
 
-                <Button
-                  onPress={() => removeField(index)}
-                  label={'Delete'}></Button>
+                <Button onPress={() => removeField(index)} label={'Delete'} />
               </View>
             ))}
 
@@ -183,13 +172,21 @@ const Category = (props: Props) => {
               label={'TITLE FIELD'}
             />
 
-            <View flex row>
+            <View row>
               <Button
                 label="Add new field"
                 onPress={() => {
                   addNewField();
-                }}></Button>
-              <Button label="Remove"></Button>
+                }}
+              />
+              <Button
+                onPress={() => {
+                  const cat = getValues();
+                  removeCategory(cat.id as string);
+                  toggleShowCategoryForm();
+                }}
+                label="Remove"
+              />
             </View>
           </View>
         )}
@@ -200,4 +197,4 @@ const Category = (props: Props) => {
     </ScrollView>
   );
 };
-export default Category;
+export default CategoryScreen;
