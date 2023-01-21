@@ -15,6 +15,7 @@ import {
 } from '../../shared/models';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {ScrollView} from 'react-native';
+import {CategoryCard} from '../../core/components';
 
 const DesktopScreen = () => {
   const categories = useStoreState(state => state.category.categories);
@@ -105,7 +106,7 @@ const DesktopScreen = () => {
         <View key={category.id}>
           {/* title */}
           <View>
-            <Text>{category.name}</Text>
+            <CategoryCard category={category} />
             <Button
               label="Add Item"
               onPress={() => {
