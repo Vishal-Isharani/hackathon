@@ -7,7 +7,7 @@ import {InputComponent} from './InputComponent';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 type Props = {
-  categoryField: any;
+  id: string;
   control: Control<Category>;
   index: number;
   removeField: (index: number) => void;
@@ -15,14 +15,14 @@ type Props = {
 
 const dropdownIcon = <Icon name="down" color={Colors.$iconDefault} />;
 export const AddAttributeComponent = ({
-  categoryField,
+  id,
   control,
   index,
   removeField,
 }: Props) => {
   return (
     <View
-      key={categoryField.id}
+      key={id}
       row
       br20
       marginB-10

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useCallback, useState} from 'react';
 import {
   Button,
   ButtonSize,
@@ -20,6 +20,7 @@ import {
   InputComponent,
   NotFoundComponent,
 } from '../../core/components';
+import {useNavigation} from '@react-navigation/native';
 
 const initialFormStat = () => new Category();
 
@@ -43,6 +44,7 @@ const ManageCategoryScreen = () => {
     keyName: 'id',
   });
 
+  const navigation = useNavigation();
   const [showNewCategoryForm, setShowNewCategoryForm] = useState(false);
   const [showTitleChangePicker, setShowTitleChangePicker] = useState(false);
 
@@ -54,6 +56,17 @@ const ManageCategoryScreen = () => {
   const removeCategory = useStoreActions(
     actions => actions.category.removeCategory,
   );
+
+  const toggleShowCategoryForm = useCallback(() => {
+    reset(initialFormStat());
+    setShowNewCategoryForm(!showNewCategoryForm);
+  }, [reset, showNewCategoryForm]);
+
+  React.useEffect(() => {
+    return navigation.addListener('blur', () => {
+      setShowNewCategoryForm(!showNewCategoryForm);
+    });
+  }, [navigation, showNewCategoryForm, toggleShowCategoryForm]);
 
   // Callback version of watch.  It's your responsibility to unsubscribe when done.
   React.useEffect(() => {
@@ -83,11 +96,6 @@ const ManageCategoryScreen = () => {
   const removeField = (index: number) => {
     resetField(`attributes.${index}`);
     remove(index);
-  };
-
-  const toggleShowCategoryForm = () => {
-    reset(initialFormStat());
-    setShowNewCategoryForm(!showNewCategoryForm);
   };
 
   return (
@@ -127,7 +135,7 @@ const ManageCategoryScreen = () => {
               {fields.map((categoryField, index) => (
                 <AddAttributeComponent
                   key={categoryField.id}
-                  categoryField={categoryField}
+                  id={categoryField.id}
                   control={control}
                   index={index}
                   removeField={ind => removeField(ind)}
@@ -144,6 +152,7 @@ const ManageCategoryScreen = () => {
                     panDirection={PanningProvider.Directions.DOWN}>
                     {getValues().attributes.map(attr => (
                       <ListItem
+                        key={attr.id}
                         onPress={() => setValue('titleAttribute', attr.name)}>
                         <Text grey10 text80 marginL-10>
                           {attr.name}

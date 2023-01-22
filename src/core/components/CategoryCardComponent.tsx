@@ -1,8 +1,7 @@
 import {Category} from '../../shared/models';
 import React from 'react';
-import {Card, Colors, Text, View} from 'react-native-ui-lib';
+import {Card, Text, View} from 'react-native-ui-lib';
 import {TextField} from 'react-native-ui-lib/src/incubator';
-import Icon from 'react-native-vector-icons/AntDesign';
 import {Control} from 'react-hook-form/dist/types';
 import {AddAttributeComponent} from './AddAttributeComponent';
 
@@ -44,8 +43,8 @@ export const CategoryCardComponent = ({
 
         {category.attributes.map((attribute, index) => (
           <AddAttributeComponent
-            key={category.id}
-            categoryField={category}
+            key={attribute.id}
+            id={attribute.id}
             control={control}
             index={index}
             removeField={ind => removeField(ind)}
