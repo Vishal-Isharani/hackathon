@@ -13,7 +13,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 
 type Props = {
   category: Category;
-  onAddItemPress: (id: string) => void;
+  onAddItemPress?: (id: string) => void;
 };
 
 const dropdownIcon = <Icon name="down" color={Colors.$iconDefault} />;
@@ -23,9 +23,11 @@ export const CategoryCard = ({category, onAddItemPress}: Props) => {
       <View padding-10>
         <View row paddingT-10 paddingH-5 spread>
           <Text>{category.name}</Text>
-          <TouchableOpacity centerV onPress={() => onAddItemPress(category.id)}>
-            <Icon name={'plus'} size={20} color={Colors.$textPrimary} />
-          </TouchableOpacity>
+          <TouchableOpacity
+            centerV
+            onPress={() =>
+              onAddItemPress ? onAddItemPress(category.id) : () => {}
+            }></TouchableOpacity>
         </View>
 
         <View
@@ -69,8 +71,9 @@ export const CategoryCard = ({category, onAddItemPress}: Props) => {
             </View>
 
             <View centerV marginT-18>
+              {/* @ts-ignore */}
               <Picker
-                value={attribute.name}
+                value={attribute.type}
                 onChange={() => {}}
                 mode={Picker.modes.SINGLE}
                 selectionLimit={3}
@@ -81,6 +84,7 @@ export const CategoryCard = ({category, onAddItemPress}: Props) => {
                 ))}
               </Picker>
             </View>
+
             <View centerV>
               <Icon size={20} name="delete" onPress={() => {}}></Icon>
             </View>

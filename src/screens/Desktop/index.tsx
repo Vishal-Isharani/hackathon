@@ -1,11 +1,11 @@
 import * as React from 'react';
-import {Text, View} from 'react-native-ui-lib';
+import {Card, Colors, Text, TouchableOpacity, View} from 'react-native-ui-lib';
 import {useStoreActions, useStoreState} from '../../core/store';
 import {CategoryItem} from '../../shared/models';
 import {useFieldArray, useForm} from 'react-hook-form';
 import {ScrollView} from 'react-native';
-import {CategoryCard} from '../../core/components';
-import AddItemComponent from '../../core/components/AddItemComponent';
+import {AddItemComponent} from '../../core/components';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const DesktopScreen = () => {
   const categories = useStoreState(state => state.category.categories);
@@ -34,16 +34,20 @@ const DesktopScreen = () => {
       {categories.map(category => (
         <View key={category.id}>
           {/* title */}
-          <View>
-            <CategoryCard
-              category={category}
-              onAddItemPress={(id: string) =>
-                addCategoryItem({
-                  categoryId: id,
-                  item: new CategoryItem(),
-                })
-              }
-            />
+          <View margin-10 paddingB-5 br10 flex>
+            <View row paddingT-10 paddingH-5 spread>
+              <Text text50>{category.name}</Text>
+              <TouchableOpacity
+                centerV
+                onPress={() =>
+                  addCategoryItem({
+                    categoryId: category.id,
+                    item: new CategoryItem(),
+                  })
+                }>
+                <Icon name={'plus'} size={20} color={Colors.$textPrimary} />
+              </TouchableOpacity>
+            </View>
           </View>
 
           <View>
@@ -64,7 +68,6 @@ const DesktopScreen = () => {
           </View>
         </View>
       ))}
-      <Text>Hello from the desktop</Text>
     </ScrollView>
   );
 };

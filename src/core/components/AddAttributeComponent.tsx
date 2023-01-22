@@ -39,7 +39,7 @@ export const AddAttributeComponent = ({
           render={({field}) => (
             <InputComponent
               value={field.value}
-              onChangeText={(text: string) => field.onChange(text)}
+              onChange={(text: string) => field.onChange(text)}
             />
           )}
         />

@@ -6,7 +6,14 @@ import {
 import {Controller} from 'react-hook-form';
 import * as React from 'react';
 import {TextField} from 'react-native-ui-lib/src/incubator';
-import {Button, Checkbox, DateTimePicker, View} from 'react-native-ui-lib';
+import {
+  Button,
+  Card,
+  Checkbox,
+  DateTimePicker,
+  View,
+} from 'react-native-ui-lib';
+import {InputComponent} from './Input';
 
 type Props = {
   categoryId: string;
@@ -25,7 +32,7 @@ export const AddItemComponent = ({
 }: Props) => {
   const renderText = (attribute: CategoryAttribute, field: any) => {
     return (
-      <TextField
+      <InputComponent
         placeholder={attribute.name}
         keyboardType={
           attribute.type === ControlType.Number ? 'numeric' : 'default'
@@ -85,14 +92,16 @@ export const AddItemComponent = ({
   };
 
   return (
-    <View key={item.id}>
-      {attributes.map(attribute => (
-        <View key={attribute.id}>{renderControl(attribute)}</View>
-      ))}
-      <Button
-        onPress={() => removeCategoryItem(categoryId, item.id)}
-        label="Remove"
-      />
-    </View>
+    <Card margin-10 paddingB-5 br10 flex>
+      <View key={item.id} padding-10 margin-10 br10 flex paddingB-5>
+        {attributes.map(attribute => (
+          <View key={attribute.id}>{renderControl(attribute)}</View>
+        ))}
+        <Button
+          onPress={() => removeCategoryItem(categoryId, item.id)}
+          label="Remove"
+        />
+      </View>
+    </Card>
   );
 };

@@ -1,6 +1,13 @@
 import * as React from 'react';
 import {useRef, useState} from 'react';
-import {Button, ButtonSize, Card, Picker, View} from 'react-native-ui-lib';
+import {
+  Button,
+  ButtonSize,
+  Card,
+  Picker,
+  Text,
+  View,
+} from 'react-native-ui-lib';
 import {ScrollView} from 'react-native';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useStoreActions, useStoreState} from '../../core/store';
@@ -66,12 +73,15 @@ const ManageCategoryScreen = () => {
   return (
     <View flex>
       <ScrollView>
+        {!categories.length && (
+          <View center paddingT-10>
+            <Text>No categories found</Text>
+          </View>
+        )}
+
         {categories.map(category => (
           <View key={category.id}>
-            <CategoryCard
-              category={category}
-              onAddItemPress={(id: string) => void 0}
-            />
+            <CategoryCard category={category} />
           </View>
         ))}
 
@@ -85,7 +95,7 @@ const ManageCategoryScreen = () => {
                 render={({field}) => (
                   <InputComponent
                     value={field.value}
-                    onChangeText={(text: string) => field.onChange(text)}
+                    onChange={(text: string) => field.onChange(text)}
                   />
                 )}
               />
