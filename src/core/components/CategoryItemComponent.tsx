@@ -38,6 +38,7 @@ export const CategoryItemComponent = ({
             categoryId={category.id}
             item={item}
             attributes={category.attributes}
+            titleAttribute={category.titleAttribute}
             removeCategoryItem={(categoryId: string, itemId: string) => {
               removeCategoryItem(categoryId, itemId);
             }}

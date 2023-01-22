@@ -32,6 +32,7 @@ const ManageCategoryScreen = () => {
     reset,
     getFieldState,
     setValue,
+    setError,
   } = useForm({
     defaultValues: initialFormStat(),
     reValidateMode: 'onChange',
@@ -57,10 +58,23 @@ const ManageCategoryScreen = () => {
   // Callback version of watch.  It's your responsibility to unsubscribe when done.
   React.useEffect(() => {
     const subscription = watch(value => {
-      value.name && value.name.length ? updateCategory(value as Category) : {};
+      if (!value.name || !value.name.length) {
+        return;
+      }
+      const isDuplicateName = categories.some(category => {
+        return (
+          category.id !== value.id &&
+          category.name.toLowerCase() === value.name?.toLowerCase()
+        );
+      });
+      if (isDuplicateName) {
+        setError('name', {message: 'Duplicate category name'});
+        return;
+      }
+      updateCategory(value as Category);
     });
     return () => subscription.unsubscribe();
-  }, [getFieldState, updateCategory, watch]);
+  }, [categories, getFieldState, setError, updateCategory, watch]);
 
   const addNewField = () => {
     append(new CategoryAttribute());
@@ -85,7 +99,12 @@ const ManageCategoryScreen = () => {
 
         {categories.map(category => (
           <View key={category.id}>
-            <CategoryCardComponent category={category} />
+            <CategoryCardComponent
+              control={control}
+              categoryField={category}
+              category={category}
+              removeField={ind => removeField(ind)}
+            />
           </View>
         ))}
 
@@ -96,10 +115,11 @@ const ManageCategoryScreen = () => {
                 control={control}
                 name={'name'}
                 rules={{required: true, maxLength: 3}}
-                render={({field}) => (
+                render={({field, fieldState}) => (
                   <InputComponent
                     value={field.value}
                     onChange={(text: string) => field.onChange(text)}
+                    validationMessage={fieldState.error?.message}
                   />
                 )}
               />

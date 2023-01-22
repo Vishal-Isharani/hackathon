@@ -16,8 +16,10 @@ export const InputComponent = (props: any) => {
         placeholder={'Name'}
         floatingPlaceholder
         migrate
+        enableErrors
         value={props.value}
         onChangeText={(text: string) => props.onChange(text)}
+        {...props}
       />
     </View>
   );

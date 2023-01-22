@@ -1,33 +1,28 @@
-import {Category, ControlType} from '../../shared/models';
+import {Category} from '../../shared/models';
 import React from 'react';
-import {
-  Card,
-  Colors,
-  Picker,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native-ui-lib';
+import {Card, Colors, Text, View} from 'react-native-ui-lib';
 import {TextField} from 'react-native-ui-lib/src/incubator';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {Control} from 'react-hook-form/dist/types';
+import {AddAttributeComponent} from './AddAttributeComponent';
 
 type Props = {
   category: Category;
-  onAddItemPress?: (id: string) => void;
+  categoryField: any;
+  control: Control<Category>;
+  removeField: (index: number) => void;
 };
 
-const dropdownIcon = <Icon name="down" color={Colors.$iconDefault} />;
-export const CategoryCardComponent = ({category, onAddItemPress}: Props) => {
+export const CategoryCardComponent = ({
+  category,
+  control,
+  removeField,
+}: Props) => {
   return (
     <Card margin-10 paddingB-5 br10 flex>
       <View padding-10>
         <View row paddingT-10 paddingH-5 spread>
           <Text>{category.name}</Text>
-          <TouchableOpacity
-            centerV
-            onPress={() =>
-              onAddItemPress ? onAddItemPress(category.id) : () => {}
-            }></TouchableOpacity>
         </View>
 
         <View
@@ -47,48 +42,14 @@ export const CategoryCardComponent = ({category, onAddItemPress}: Props) => {
           />
         </View>
 
-        {category.attributes.map(attribute => (
-          <View
-            key={attribute.id}
-            row
-            br20
-            marginB-10
-            paddingH-5
-            paddingV-5
-            spread
-            style={{
-              borderWidth: 0.5,
-            }}>
-            <View width={'50%'}>
-              <TextField
-                placeholder={attribute.name}
-                floatingPlaceholder
-                value={attribute.name}
-                onChangeText={() => {}}
-                disabled
-                migrateTextField
-              />
-            </View>
-
-            <View centerV marginT-18>
-              {/* @ts-ignore */}
-              <Picker
-                value={attribute.type}
-                onChange={() => {}}
-                mode={Picker.modes.SINGLE}
-                selectionLimit={3}
-                trailingAccessory={dropdownIcon}
-                migrateTextField>
-                {Object.keys(ControlType).map(key => (
-                  <Picker.Item key={key} value={key} label={key} />
-                ))}
-              </Picker>
-            </View>
-
-            <View centerV>
-              <Icon size={20} name="delete" onPress={() => {}}></Icon>
-            </View>
-          </View>
+        {category.attributes.map((attribute, index) => (
+          <AddAttributeComponent
+            key={category.id}
+            categoryField={category}
+            control={control}
+            index={index}
+            removeField={ind => removeField(ind)}
+          />
         ))}
       </View>
     </Card>

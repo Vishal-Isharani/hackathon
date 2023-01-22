@@ -12,7 +12,6 @@ import com.facebook.soloader.SoLoader;
 import com.hackathon2.newarchitecture.MainApplicationReactNativeHost;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import android.os.Bundle;
 
 public class MainApplication extends Application implements ReactApplication {
 
