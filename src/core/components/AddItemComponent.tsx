@@ -5,15 +5,15 @@ import {
 } from '../../shared/models';
 import {Controller} from 'react-hook-form';
 import * as React from 'react';
-import {TextField} from 'react-native-ui-lib/src/incubator';
 import {
   Button,
+  ButtonSize,
   Card,
   Checkbox,
   DateTimePicker,
   View,
 } from 'react-native-ui-lib';
-import {InputComponent} from './Input';
+import {InputComponent} from './InputComponent';
 
 type Props = {
   categoryId: string;
@@ -51,12 +51,20 @@ export const AddItemComponent = ({
 
   const renderDate = (attribute: CategoryAttribute, field: any) => {
     return (
-      <DateTimePicker
-        title={attribute.name}
-        placeholder={attribute.name}
-        mode={'date'}
-        onChange={(date: Date) => field.onChange(date)}
-      />
+      <View
+        br20
+        marginB-10
+        padding-5
+        style={{
+          borderWidth: 0.5,
+        }}>
+        <DateTimePicker
+          title={attribute.name}
+          placeholder={attribute.name}
+          mode={'date'}
+          onChange={(date: Date) => field.onChange(date)}
+        />
+      </View>
     );
   };
 
@@ -97,10 +105,14 @@ export const AddItemComponent = ({
         {attributes.map(attribute => (
           <View key={attribute.id}>{renderControl(attribute)}</View>
         ))}
-        <Button
-          onPress={() => removeCategoryItem(categoryId, item.id)}
-          label="Remove"
-        />
+        <View center>
+          <Button
+            size={ButtonSize.small}
+            outline
+            onPress={() => removeCategoryItem(categoryId, item.id)}
+            label="Remove"
+          />
+        </View>
       </View>
     </Card>
   );

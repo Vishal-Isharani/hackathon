@@ -3,7 +3,7 @@ import * as React from 'react';
 import {Control} from 'react-hook-form/dist/types';
 import {Colors, Picker, View} from 'react-native-ui-lib';
 import {Controller} from 'react-hook-form';
-import {InputComponent} from './Input';
+import {InputComponent} from './InputComponent';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 type Props = {

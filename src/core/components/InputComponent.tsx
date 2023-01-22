@@ -7,7 +7,7 @@ export const InputComponent = (props: any) => {
     <View
       br20
       marginB-10
-      paddingH-5
+      padding-5
       style={{
         borderWidth: 0.5,
       }}>

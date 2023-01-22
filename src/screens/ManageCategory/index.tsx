@@ -1,13 +1,6 @@
 import * as React from 'react';
 import {useRef, useState} from 'react';
-import {
-  Button,
-  ButtonSize,
-  Card,
-  Picker,
-  Text,
-  View,
-} from 'react-native-ui-lib';
+import {Button, ButtonSize, Card, Picker, View} from 'react-native-ui-lib';
 import {ScrollView} from 'react-native';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useStoreActions, useStoreState} from '../../core/store';
@@ -15,8 +8,9 @@ import {Category, CategoryAttribute} from '../../shared/models';
 import {Picker as CustomPicker} from '@react-native-picker/picker';
 import {
   AddAttributeComponent,
-  CategoryCard,
+  CategoryCardComponent,
   InputComponent,
+  NotFoundComponent,
 } from '../../core/components';
 
 const initialFormStat = () => new Category();
@@ -74,14 +68,12 @@ const ManageCategoryScreen = () => {
     <View flex>
       <ScrollView>
         {!categories.length && (
-          <View center paddingT-10>
-            <Text>No categories found</Text>
-          </View>
+          <NotFoundComponent message="No categories found" />
         )}
 
         {categories.map(category => (
           <View key={category.id}>
-            <CategoryCard category={category} />
+            <CategoryCardComponent category={category} />
           </View>
         ))}
 

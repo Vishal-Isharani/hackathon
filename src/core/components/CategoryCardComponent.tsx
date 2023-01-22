@@ -17,7 +17,7 @@ type Props = {
 };
 
 const dropdownIcon = <Icon name="down" color={Colors.$iconDefault} />;
-export const CategoryCard = ({category, onAddItemPress}: Props) => {
+export const CategoryCardComponent = ({category, onAddItemPress}: Props) => {
   return (
     <Card margin-10 paddingB-5 br10 flex>
       <View padding-10>
