@@ -1,5 +1,5 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import CategoryScreen from '../../screens/Category';
+import ManageCategoryScreen from '../../screens/ManageCategory';
 import DesktopScreen from '../../screens/Desktop';
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
@@ -26,7 +26,7 @@ const MyDrawer = () => {
           />
         ))}
 
-      <Drawer.Screen name="Manage Category" component={CategoryScreen} />
+      <Drawer.Screen name="Manage Category" component={ManageCategoryScreen} />
     </Drawer.Navigator>
   );
 };

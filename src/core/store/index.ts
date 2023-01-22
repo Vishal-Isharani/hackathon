@@ -17,8 +17,8 @@ const storage = {
 
 const store = createStore<StoreModel>(
   persist(storeDefinition, {
-    storage,
-    allow: ['category'],
+    // storage,
+    // allow: ['category'],
   }),
 );
 

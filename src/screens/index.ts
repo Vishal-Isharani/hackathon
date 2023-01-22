@@ -1,3 +1,3 @@
 export * from './Desktop';
-export * from './Category';
+export * from './ManageCategory';
 export * from './CategoryDetails';
