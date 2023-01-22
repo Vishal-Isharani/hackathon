@@ -11,12 +11,14 @@ import {
   Card,
   Checkbox,
   DateTimePicker,
+  Text,
   View,
 } from 'react-native-ui-lib';
 import {InputComponent} from './InputComponent';
 
 type Props = {
   categoryId: string;
+  titleAttribute: string;
   item: CategoryItem;
   attributes: CategoryAttribute[];
   removeCategoryItem: (categoryId: string, itemId: string) => void;
@@ -29,6 +31,7 @@ export const AddItemComponent = ({
   attributes,
   removeCategoryItem,
   control,
+  titleAttribute,
 }: Props) => {
   const renderText = (attribute: CategoryAttribute, field: any) => {
     return (
@@ -102,6 +105,12 @@ export const AddItemComponent = ({
   return (
     <Card margin-10 paddingB-5 br10 flex>
       <View key={item.id} padding-10 margin-10 br10 flex paddingB-5>
+        {item.name === titleAttribute && (
+          <View>
+            <Text text70>{item.value}</Text>
+          </View>
+        )}
+
         {attributes.map(attribute => (
           <View key={attribute.id}>{renderControl(attribute)}</View>
         ))}

@@ -3,7 +3,7 @@ import {useStoreActions, useStoreState} from '../../core/store';
 import {CategoryItem} from '../../shared/models';
 import {useFieldArray, useForm} from 'react-hook-form';
 import {ScrollView} from 'react-native';
-import {CategoryItemComponent} from '../../core/components';
+import {CategoryItemComponent, NotFoundComponent} from '../../core/components';
 
 const DesktopScreen = () => {
   const categories = useStoreState(state => state.category.categories);
@@ -29,6 +29,9 @@ const DesktopScreen = () => {
 
   return (
     <ScrollView padding-20>
+      {!categories.length && (
+        <NotFoundComponent message="No categories found" />
+      )}
       {categories.map(category => (
         <CategoryItemComponent
           key={category.id}

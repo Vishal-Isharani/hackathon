@@ -1,11 +1,19 @@
 import * as React from 'react';
-import {useRef, useState} from 'react';
-import {Button, ButtonSize, Card, Picker, View} from 'react-native-ui-lib';
+import {useState} from 'react';
+import {
+  Button,
+  ButtonSize,
+  Card,
+  Dialog,
+  ListItem,
+  PanningProvider,
+  Text,
+  View,
+} from 'react-native-ui-lib';
 import {ScrollView} from 'react-native';
 import {Controller, useFieldArray, useForm} from 'react-hook-form';
 import {useStoreActions, useStoreState} from '../../core/store';
 import {Category, CategoryAttribute} from '../../shared/models';
-import {Picker as CustomPicker} from '@react-native-picker/picker';
 import {
   AddAttributeComponent,
   CategoryCardComponent,
@@ -16,19 +24,23 @@ import {
 const initialFormStat = () => new Category();
 
 const ManageCategoryScreen = () => {
-  const {control, watch, getValues, resetField, reset, getFieldState} = useForm(
-    {
-      defaultValues: initialFormStat(),
-      reValidateMode: 'onChange',
-    },
-  );
+  const {
+    control,
+    watch,
+    getValues,
+    resetField,
+    reset,
+    getFieldState,
+    setValue,
+  } = useForm({
+    defaultValues: initialFormStat(),
+    reValidateMode: 'onChange',
+  });
   const {fields, append, remove} = useFieldArray({
     control,
     name: 'attributes',
     keyName: 'id',
   });
-
-  const pickerRef = useRef();
 
   const [showNewCategoryForm, setShowNewCategoryForm] = useState(false);
   const [showTitleChangePicker, setShowTitleChangePicker] = useState(false);
@@ -103,38 +115,28 @@ const ManageCategoryScreen = () => {
               ))}
 
               <View marginB-10>
-                {showTitleChangePicker && (
-                  /* @ts-ignore */
-                  <Controller
-                    control={control}
-                    name={'titleAttribute'}
-                    render={({field}) => {
-                      return (
-                        /* @ts-ignore */
-                        <CustomPicker
-                          /* @ts-ignore */
-                          ref={pickerRef}
-                          value={field.value}
-                          onValueChange={({value}: {value: string}) => {
-                            field.onChange(value);
-                          }}>
-                          {getValues()?.attributes?.map(option => (
-                            <Picker.Item
-                              key={option.id}
-                              value={option.name}
-                              label={option.name}
-                            />
-                          ))}
-                        </CustomPicker>
-                      );
-                    }}
-                  />
-                )}
+                {
+                  <Dialog
+                    useSafeArea={true}
+                    overlayBackgroundColor={'#ffffff'}
+                    visible={showTitleChangePicker}
+                    onDismiss={() => console.log('dismissed')}
+                    panDirection={PanningProvider.Directions.DOWN}>
+                    {getValues().attributes.map(attr => (
+                      <ListItem
+                        onPress={() => setValue('titleAttribute', attr.name)}>
+                        <Text grey10 text80 marginL-10>
+                          {attr.name}
+                        </Text>
+                      </ListItem>
+                    ))}
+                  </Dialog>
+                }
 
                 <Button
+                  disabled={!getValues().attributes.length}
                   size={ButtonSize.small}
                   onPress={() => {
-                    console.log(pickerRef.current);
                     setShowTitleChangePicker(!showTitleChangePicker);
                   }}
                   label={'TITLE FIELD'}
@@ -143,6 +145,7 @@ const ManageCategoryScreen = () => {
 
               <View spread row>
                 <Button
+                  disabled={!getValues().name.length}
                   size={ButtonSize.small}
                   label="Add new field"
                   onPress={() => {

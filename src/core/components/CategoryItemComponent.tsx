@@ -34,6 +34,7 @@ export const CategoryItemComponent = ({
       <View>
         {category.items.map(item => (
           <AddItemComponent
+            key={item.id}
             categoryId={category.id}
             item={item}
             attributes={category.attributes}
